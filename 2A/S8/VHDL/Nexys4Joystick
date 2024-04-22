@@ -1,0 +1,146 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.std_logic_arith.all;
+use IEEE.std_logic_unsigned.all;
+
+entity Nexys4Joystick is
+  port (
+    -- les 16 switchs
+    swt : in std_logic_vector (15 downto 0);
+    -- les 5 boutons noirs
+    btnC, btnU, btnL, btnR, btnD : in std_logic;
+    -- horloge
+    mclk : in std_logic;
+    -- les 16 leds
+    led : out std_logic_vector (15 downto 0);
+    -- les anodes pour sélectionner les afficheurs 7 segments à utiliser
+    an : out std_logic_vector (7 downto 0);
+    -- valeur affichée sur les 7 segments (point décimal compris, segment 7)
+    ssg : out std_logic_vector (7 downto 0)
+  );
+end Nexys4Joystick;
+
+architecture synthesis of Nexys4Joystick is
+
+  -- rappel du (des) composant(s)
+  -- À COMPLÉTER 
+  
+  COMPONENT MasterJoystick
+         PORT(
+			rst     : in std_logic;
+         clk     : in std_logic;
+         en      : in std_logic;
+         led1    : in std_logic;
+         led2    : in std_logic;
+         miso    : in std_logic;
+         ss      : out std_logic;
+         sclk    : out std_logic;
+         mosi    : out std_logic;
+         busy    : out std_logic;
+         xaxis	  : out std_logic_vector (9 downto 0);
+         yaxis   : out std_logic_vector (9 downto 0);
+         bt1	  : out std_logic ;
+			bt2     : out std_logic ;
+			btjoy   : out std_logic 
+			);
+  END COMPONENT;
+  
+  COMPONENT diviseurClk
+			generic(facteur : natural);
+			port (
+			clk, reset : in  std_logic;
+			nclk       : out std_logic);
+	 
+  END COMPONENT;
+  
+  COMPONENT dec7seg  
+			port (
+			 value : in std_logic_vector(3 downto 0);
+			 seg 	 : out std_logic_vector (7 downto 0));
+  END COMPONENT ;
+  
+  
+  COMPONENT All7Segments 
+    Port ( clk : in  std_logic;
+           reset : in std_logic;
+           e0 : in std_logic_vector (3 downto 0);
+           e1 : in std_logic_vector (3 downto 0);
+           e2 : in std_logic_vector (3 downto 0);
+           e3 : in std_logic_vector (3 downto 0);
+           e4 : in std_logic_vector (3 downto 0);
+           e5 : in std_logic_vector (3 downto 0);
+           e6 : in std_logic_vector (3 downto 0);
+           e7 : in std_logic_vector (3 downto 0);
+           an : out std_logic_vector (7 downto 0);
+           ssg: out std_logic_vector (7 downto 0));
+		END COMPONENT	;
+		
+		
+		
+	 signal xaxis : std_logic_vector(9 downto 0);
+    signal yaxis : std_logic_vector(9 downto 0);
+	 signal nclk: std_logic;
+	 signal reset: std_logic := '0';
+	  
+begin
+
+  -- valeurs des sorties (à modifier)
+
+-- convention afficheur 7 segments 0 => allumé, 1 => éteint
+  ssg <= (others => '1');
+  -- aucun afficheur sélectionné
+ an(7 downto 0) <= (others => '1');
+  -- 16 leds éteintes
+ led(15 downto 0) <= (others => '0');
+
+
+  -- À COMPLÉTER 
+    
+	   -- Connexion diviseurClk
+  diviseur: diviseurClk
+    generic map (facteur => 10000) 
+    port map (
+      clk => mclk,
+      reset => reset,
+      nclk => nclk
+    );
+
+  -- Connexion MasterJoystick
+  joystick: MasterJoystick
+    port map (
+      rst => btnC, 
+      clk => nclk, 
+      en => btnU,
+      led1 => swt(0),
+      led2 => swt(1),
+      miso => '0', 
+      ss => ss, 
+      sclk => sclk, 
+      mosi => mosi, 
+      busy => busy,
+      xaxis => xaxis,
+      yaxis => yaxis,
+      bt1 => led(2),
+      bt2 => led(3), 
+      btjoy => led(1)
+    );
+
+  -- Connexion All7Segments
+  affichage: All7Segments
+    port map (
+      clk => nclk,
+      reset => reset,
+      e0 => xaxis(3 downto 0), 
+      e1 => xaxis(7 downto 4), 
+      e2 => (others => '0'),
+      e3 => (others => '0'),
+      e4 => yaxis(3 downto 0), 
+      e5 => yaxis(7 downto 4),
+      e6 => (others => '0'),
+      e7 => (others => '0'),
+      an => an,
+      ssg => ssg
+    );
+	 
+	 
+end synthesis;

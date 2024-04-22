@@ -1,0 +1,167 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity MasterJoystick is
+  port ( 
+			rst     : in std_logic;
+         clk     : in std_logic;
+         en      : in std_logic;
+         led1    : in std_logic;
+         led2    : in std_logic;
+         miso    : in std_logic;
+         ss      : out std_logic;
+         sclk    : out std_logic;
+         mosi    : out std_logic;
+         busy    : out std_logic;
+         xaxis	  : out std_logic_vector (9 downto 0);
+         yaxis   : out std_logic_vector (9 downto 0);
+         bt1	  : out std_logic ;
+			bt2     : out std_logic ;
+			btjoy   : out std_logic 
+			);
+
+end MasterJoystick;
+
+	architecture behavior of MasterJoystick is
+	type t_etat is (repos,attente,echange);
+	signal etat : t_etat;
+
+
+
+  component er_1octet
+    port ( 
+			  rst  : in std_logic;
+           clk  : in std_logic;
+           en   : in std_logic;
+           din  : in std_logic_vector (7 downto 0);
+           miso : in std_logic;
+           sclk : out std_logic;
+           mosi : out std_logic;
+           dout : out std_logic_vector (7 downto 0);
+           busy : out std_logic);
+  end component;
+      
+    signal er_en : std_logic;
+    signal er_din : std_logic_vector(7 downto 0);
+    signal er_dout : std_logic_vector(7 downto 0);
+    signal er_busy : std_logic;
+	 
+  begin
+   
+    m : er_1octet port map(
+        rst=>rst,
+        clk=>clk,
+        en=>er_en,
+        din=>er_din,
+        miso=>miso,
+        sclk=>sclk,
+        mosi=>mosi,
+        dout=>er_dout,
+        busy=>er_busy
+    );
+	 
+ process(clk, rst)
+    
+ variable cpt: natural;
+ variable byte: natural;
+	 begin
+	  -- reset condition
+    if rst = '0' then
+        etat <= repos;
+        busy <= '0';
+        ss <= '1';
+        xaxis  <= (others => '0');
+		  yaxis  <= (others => '0');
+		  btjoy  <= '0';
+		  
+		  elsif(rising_edge(clk))then
+				case etat is
+						when repos =>   --etat repos 
+							if en = '1' then
+								ss		<= '0';
+								busy 	<= '1';
+								cpt	:= 15;
+								etat	<= attente;
+							else 
+							  null
+							end if;
+							
+						when attente =>   -- etat attente
+							if cpt = 0 then
+								er_en <='1';
+								
+								if byte = 1 then
+									
+									elsif byte = 2 then
+										er_din <= (0 => led1, 1 => led2, 7 => '1', others => '0');
+									elsif byte = 3 then	
+										er_din <= (0 => led1, 1 => led2, 7 => '1', others => '0');
+									elsif byte = 4 then	
+										er_din <= (0 => led1, 1 => led2, 7 => '1', others => '0');
+									elsif byte = 5 then
+										er_din <= (0 => led1, 1 => led2, 7 => '1', others => '0');
+								end if;
+								   etat <= echange;
+							else 
+								cpt:= cpt - 1;
+							end if;
+							
+							
+							when echange =>  --etat echange
+                         er_en <= '0';
+                         if er_busy = '0' and er_en ='0' then
+								 
+								   if byte = 1 then
+                             xaxis(7 downto 0) <= er_dout;
+                             byte := 2;
+                             etat <= attente;
+									  
+									  
+									 elsif byte = 2 then 
+								     xaxis(9 downto 8) <= er_dout;
+                             byte := 3;
+                             etat <= attente;
+									  
+									 elsif byte = 3 then 
+									  yaxis(7 downto 0) <= er_dout;
+                             byte := 4;
+                             etat <= attente;
+									  
+									 elsif byte = 4 then 
+								     yaxis(9 downto 8) <= er_dout;
+                             byte := 5;
+                             etat <= attente;
+									  
+									  
+									 elsif byte = 5 then 
+										bt2 	<= er_dout(2);
+                              bt1 	<= er_dout(1);
+                              btjoy <= er_dout(0);
+                              byte 	:= 1;
+                              ss 	<= '1';
+                              busy 	<= '0'; --transmission terminee
+                              etat 	<= repos;
+								 else
+									null;
+	
+					
+					end if;		
+                    byte := byte + 1;
+                    cpt :=2;
+                end if;
+
+            when others => null;
+        end case;
+    end if;
+				
+			end process;
+	end behavior;
+								  
+								  
+								  
+								  
+								  
+								  
+								  
+								  
+                                        
