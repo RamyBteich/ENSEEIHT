@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".display">
+
+
+    <TextView
+        android:id="@+id/ALLDEVICES"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/audiowide"
+        android:text="Or you can see all the devices here"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.897" />
+
+    <TextView
+        android:id="@+id/choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/audiowide"
+        android:text="Please choose one of the following  actions:\n server for hub or client for user control"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.379" />
+
+    <TextView
+        android:id="@+id/houseapp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/audiowide"
+        android:text="My House App"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+
+        android:textSize="48sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.592"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.168" />
+
+    <Button
+        android:id="@+id/display_but"
+        style="@style/Widget.MaterialComponents.TimePicker.Button"
+        android:layout_width="132dp"
+        android:layout_height="57dp"
+        android:fontFamily="@font/audiowide"
+        android:scrollbarStyle="insideInset"
+        android:shadowColor="#00EAE3E3"
+        android:text="List All The Devices"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textColorLink="#00CF1313"
+        android:textSize="10sp"
+        android:textStyle="bold|italic"
+        app:iconTint="#DA2525"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976"
+        app:rippleColor="#FFFFFF"
+        app:strokeColor="#00B66969" />
+
+    <Button
+        android:id="@+id/client"
+        style="@style/Widget.MaterialComponents.TimePicker.Button"
+        android:layout_width="132dp"
+        android:layout_height="57dp"
+        android:fontFamily="@font/audiowide"
+        android:scrollbarStyle="insideInset"
+        android:shadowColor="#00EAE3E3"
+        android:text="CLIENT"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textColorLink="#00CF1313"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        app:iconTint="#DA2525"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.172"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.532"
+        app:rippleColor="#FFFFFF"
+        app:strokeColor="#00B66969" />
+
+    <Button
+        android:id="@+id/server"
+        style="@style/Widget.MaterialComponents.TimePicker.Button"
+        android:layout_width="132dp"
+        android:layout_height="57dp"
+        android:fontFamily="@font/audiowide"
+        android:scrollbarStyle="insideInset"
+        android:shadowColor="#00EAE3E3"
+        android:text="SERVER"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textColorLink="#00CF1313"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        app:iconTint="#DA2525"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.813"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.532"
+        app:rippleColor="#FFFFFF"
+        app:strokeColor="#00B66969" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
